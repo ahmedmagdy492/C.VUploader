@@ -1,0 +1,119 @@
+﻿@model CVUploader.ViewModels.ApplicantViewModel 
+@{
+    ViewBag.Title = "Upload Your CV";
+}
+
+@using(Html.BeginForm("Create", "Applicant", FormMethod.Post, new { @class = "form-horizontal", style= "width:50%;margin:50px auto;border: 1px solid #ddd;padding: 10px;border-radius: 7px;", enctype="multipart/form-data", id="applicantForm" }))
+{
+    <fieldset>
+        <legend style="text-align: center">Job Application</legend>
+        <div class="form-group">
+            @Html.LabelFor(l => l.Applicant.FullName, new { @class = "col-lg-3 control-label", @for = "inputFullName" })
+            <div class="col-lg-9">
+                @Html.TextBoxFor(t => t.Applicant.FullName, new { @class = "form-control", id = "inputFullName", placeholder = "Full Name", required = "" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(l => l.Applicant.DateOfBirth, new { @class = "col-lg-3 control-label", @for = "inputDateOfBirth" })
+            <div class="col-lg-9">
+                <input type="date" name="Applicant.DateOfBirth" class="form-control" id="inputDateOfBirth" required>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(l => l.Applicant.Gender, new { @class = "col-lg-3 control-label", @for = "genderSelect" })
+            <div class="col-lg-9">
+                <select class="form-control" id="genderSelect" name="Applicant.Gender" required>
+                    <option value="0">Male</option>
+                    <option value="1">Female</option>
+                    <option value="2">Others</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(l => l.Applicant.City, new { @class = "col-lg-3 control-label", @for = "inputCity" })
+            <div class="col-lg-9">
+                @Html.TextBoxFor(t => t.Applicant.City, new { @class = "form-control", id = "inputCity", placeholder = "City", required = "" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(l => l.Applicant.Area, new { @class = "col-lg-3 control-label", @for = "inputArea" })
+            <div class="col-lg-9">
+                @Html.TextBoxFor(t => t.Applicant.Area, new { @class = "form-control", id = "inputArea", placeholder = "Area", required = "" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(l => l.Applicant.Address, new { @class = "col-lg-3 control-label", @for = "inputAddress" })
+            <div class="col-lg-9">
+                @Html.TextAreaFor(t => t.Applicant.Address, new { @class = "form-control", id = "inputAddress", placeholder = "Address", required = "" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(l => l.Image, new { @class = "col-lg-3 control-label", @for = "inputImgUploader" })
+            <div class="col-lg-9">
+                <input type="file" accept="image/*" name="Image" class="form-control" id="inputImgUploader" required>
+                <span>image should be 256x256</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(l => l.CVFile, new { @class = "col-lg-3 control-label", @for = "inputFileUploader" })
+            <div class="col-lg-9">
+                <input type="file" name="CVFile" class="form-control" id="inputFileUploader" required>
+                <span>Pdf or Word file maximum size 1mb</span>
+            </div>
+        </div>
+
+        <div class="form-group" style="width: 50%;margin: auto;">
+            <div class="col-lg-12">
+                <button type="submit" style="width: 100%;" class="btn btn-danger">Submit</button>
+            </div>
+        </div>
+
+        @if (Model != null)
+        {
+            <div class="form-group" id="validation" style="color: #f00;width: 50%;margin: 30px auto">
+                @Html.ValidationSummary()
+            </div>
+        }
+    </fieldset>
+}
+
+@section scripts
+{ 
+    <script>
+        window.onload = function () {
+            document.querySelector("#inputFullName").focus();
+            let applicantForm = document.querySelector("#applicantForm");
+            let img = document.querySelector("#inputImgUploader");
+            let cv = document.querySelector("#inputFileUploader");
+
+            applicantForm.onsubmit = function (e) {
+                // validating the uploaded files
+                let uploadedImgs = img.files[0].name.split('.');
+                imgExtension = uploadedImgs[uploadedImgs.length - 1];
+
+                if (imgExtension != "png" && imgExtension != "jpg") {
+                    alert("image can only be of type jpg or png");
+                    e.preventDefault();
+                }
+
+                let uploadedFiles = cv.files[0].name.split('.');
+                let fileExtension = uploadedFiles[uploadedFiles.length - 1];
+
+                if (fileExtension != "pdf" && fileExtension != "docx") {
+                    alert("C.V can only be of type pdf or docx");
+                    e.preventDefault();
+                }
+            };
+
+            let validation = document.querySelector("#validation");
+            if (validation != null) {
+                window.scrollBy(0, 10000);
+            }
+        }
+    </script>
+}

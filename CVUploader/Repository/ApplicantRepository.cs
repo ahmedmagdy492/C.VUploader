@@ -27,7 +27,7 @@ namespace CVUploader.Repository
 
         public async Task<IEnumerable<Applicant>> GetApplicants()
         {
-            return await _context.Applicants.ToListAsync();
+            return await _context.Applicants.Include("Documents").ToListAsync();
         }
     }
 }

@@ -1,0 +1,45 @@
+﻿@model IEnumerable<CVUploader.Models.Applicant>
+@{
+    ViewBag.Title = "Home";
+}
+
+@if(Model.Count() == 0)
+{
+    <h3 style="text-align: center;margin-top: 70px;">No Applicants Yet</h3>
+}
+else
+{
+    <table style="margin-top: 70px;" class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Date Of Birth</th>
+                <th>Gender</th>
+                <th>City</th>
+                <th>Area</th>
+                <th>Address</th>
+                <th>Image</th>
+                <th>C.V</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var applicant in Model)
+            {
+                <tr>
+                    <td>@applicant.FullName</td>
+                    <td>@applicant.DateOfBirth.ToShortDateString()</td>
+                    <td>@((CVUploader.Models.Gender)applicant.Gender)</td>
+                    <td>@applicant.City</td>
+                    <td>@applicant.Area</td>
+                    <td>@applicant.Address</td>
+                    <td>
+                        <img src="~/Content/Uploads/imgs/@applicant.Documents[0].URI" class="img-rounded" />
+                    </td>
+                    <td>
+                        <a href="~/Content/Uploads/documents/@applicant.Documents[1].URI" download="">Download C.V</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
